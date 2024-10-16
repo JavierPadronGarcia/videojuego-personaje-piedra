@@ -168,12 +168,14 @@ function a() {
     p -= paso;
     if (p < 0) { p = 0; }
     frameIndex = (frameIndex + 1) % totalFrames;
+    sy = 112;
     sx = sw * frameIndex;
     ctx.drawImage(img, sx, sy, sw, sh, dx + p, dy, dw, dh);
     //Despues de que se redibuje, se envía la información al servidor
     console.log("Enviando la posición del jugador:");
     console.log(p);
     socket.send(JSON.stringify({ type: "posPlayer", posPlayerX: p }))
+    
     //Idea loca, en vez de publicar la posicioon publico el lado al que va, así
     //en el otro lado solo habría que llamar a la funcion del lado correcto
     // 0 izquierda y 1 derecha
@@ -181,10 +183,12 @@ function a() {
 }
 function b() {
     //FUNCION DE IR A LA DERECHA
+    sy = 0;
     ctx.drawImage(img2, p, 480, sw, sh, p, 480, dw, dh);// el fondo es de 800*600
     p += paso;
     if (p > 729) { p = 729; }//800-71 ancho del fondo menos ancho del sprite
     frameIndex = (frameIndex + 1) % totalFrames;
+    
     sx = sw * frameIndex;
     ctx.drawImage(img, sx, sy, sw, sh, dx + p, dy, dw, dh);
     //Despues de que se redibuje, se envía la información al servidor
@@ -202,32 +206,32 @@ function checkKeyPressed(e) {
 
     if ((e.keyCode == "37") && (!colision)) {
 
-        sy = 112;
+        
 
 
         setTimeout(a, 0);
-        socket.send(JSON.stringify({ type: "movePlayer", side: 0, username: playerRole }))
+        
         setTimeout(a, 100);
-        socket.send(JSON.stringify({ type: "movePlayer", side: 0, username: playerRole }))
+        
         setTimeout(a, 200);
-        socket.send(JSON.stringify({ type: "movePlayer", side: 0, username: playerRole }))
+        
         setTimeout(a, 300);
         socket.send(JSON.stringify({ type: "movePlayer", side: 0, username: playerRole }))
-        //setTimeout(a,400);
+        setTimeout(a,400);
 
 
     }
     if ((e.keyCode == "39") && (!colision)) {
-        sy = 0;
+        
         setTimeout(b, 0);
-        socket.send(JSON.stringify({ type: "movePlayer", side: 1, username: playerRole }))
+        
         setTimeout(b, 100);
-        socket.send(JSON.stringify({ type: "movePlayer", side: 1, username: playerRole }))
+        
         setTimeout(b, 200);
-        socket.send(JSON.stringify({ type: "movePlayer", side: 1, username: playerRole }))
+        
         setTimeout(b, 300);
         socket.send(JSON.stringify({ type: "movePlayer", side: 1, username: playerRole }))
-        //setTimeout(b,400);
+        setTimeout(b,400);
 
 
     }
@@ -302,9 +306,21 @@ socket.onmessage = (event) => {
   }
   if (data.type === 'movePlayer') {
     if(data.side === 0){
-      a()
+        setTimeout(a, 0);
+        setTimeout(a, 100);
+        setTimeout(a, 200);
+        setTimeout(a, 300);
+        setTimeout(a,400);
     } else if (data.side === 1) {
-      b()
+        setTimeout(b, 0);
+        
+        setTimeout(b, 100);
+        
+        setTimeout(b, 200);
+        
+        setTimeout(b, 300);
+
+        setTimeout(b,400);
     } else {
       console.log("Direccion desconocida...")
     }
